@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bello - The Social Robot for Meaningful Connections</title>
+    <meta name="description" content="Bello is a secure, native-AI social robot designed to support elderly people with dementia through meaningful, personalized interactions.">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="navbar">
+        <div class="logo">Bello<span>.</span></div>
+        <nav>
+            <a href="#features">Features</a>
+            <a href="#security">Privacy & Security</a>
+            <a href="#order" class="btn-primary">Order Now</a>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Meet Bello. <br>Your Companion in Memory.</h1>
+            <p>A talkative, fun, and secure social robot designed to bring joy and assistance to elderly individuals with dementia. Bello speaks your language and uses past memories to create meaningful interactions.</p>
+            <a href="#order" class="btn-primary large">Order Bello Today</a>
+        </div>
+        <div class="hero-image">
+            <div class="blob"></div>
+            <img src="bello-robot.jpg" alt="Bello Social Robot Companion" id="bello-img">
+        </div>
+    </section>
+
+    <section id="features" class="features">
+        <h2>More Than Just a Robot</h2>
+        <div class="feature-grid">
+            <div class="feature-card">
+                <div class="icon">🗣️</div>
+                <h3>Meaningful Conversations</h3>
+                <p>Bello uses past memories to engage in personalized, familiar interactions in the user's native language.</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon">🧠</div>
+                <h3>Native AI System</h3>
+                <p>Completely self-contained intelligence. Bello doesn't rely on cloud APIs, ensuring lightning-fast responses and unparalleled privacy.</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon">✨</div>
+                <h3>Fun & Helpful</h3>
+                <p>From playing favorite songs and telling stories to helping with basic daily tasks, Bello is a constant source of joy.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="security" class="security">
+        <div class="security-content">
+            <h2>Your Privacy is Our Priority.</h2>
+            <p>We believe memory is sacred. That's why Bello is built with a strictly native AI architecture. No continuous internet connection is required for core interactions. Fully GDPR compliant, Bello guarantees that your loved one's data never leaves their side.</p>
+        </div>
+    </section>
+
+    <section id="order" class="order-section">
+        <div class="order-container">
+            <h2>Bring Bello Home</h2>
+            <p>Leave your details below to place an order or inquire about Bello.</p>
+            <form id="orderForm" action="contact.php" method="POST">
+                <div class="input-group">
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="input-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="input-group">
+                    <label for="quantity">Number of Units</label>
+                    <input type="number" id="quantity" name="quantity" min="1" value="1" required>
+                </div>
+                <button type="submit" class="btn-submit">Submit Request</button>
+                <div id="formStatus"></div>
+            </form>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 Bello Robotics. All rights reserved.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
