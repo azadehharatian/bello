@@ -695,6 +695,74 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // --- Order Form → Formspree Submission ---
+    const orderForm = document.getElementById('orderForm');
+    if (orderForm) {
+        orderForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const submitBtn = orderForm.querySelector('.btn-submit');
+            const statusDiv = document.getElementById('formStatus');
+
+            // Bilingual loading state
+            submitBtn.textContent = currentLang === 'nl' ? 'Verzenden...' : 'Sending...';
+            submitBtn.disabled = true;
+            statusDiv.textContent = '';
+            statusDiv.style.color = '';
+
+            try {
+                const formData = new FormData(orderForm);
+
+                const response = await fetch('https://formspree.io/f/xbgdoazn', {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        // Formspree returns JSON (not redirect) when this header is set
+                        'Accept': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    // Success
+                    statusDiv.textContent = currentLang === 'nl'
+                        ? '✅ Bedankt! Uw bestelaanvraag is ontvangen. Wij nemen zo snel mogelijk contact met u op.'
+                        : '✅ Thank you! Your order request has been received. We will contact you shortly.';
+                    statusDiv.style.color = '#FFC917';
+                    orderForm.reset();
+                    updateBelloScreen(
+                        currentLang === 'nl'
+                            ? 'Bestelaanvraag succesvol verstuurd via Formspree!'
+                            : 'Order request successfully submitted via Formspree!',
+                        'speaking',
+                        currentLang === 'nl' ? 'BESTELLING ONTVANGEN' : 'ORDER RECEIVED'
+                    );
+                    speakOutLoud(
+                        currentLang === 'nl'
+                            ? 'Bedankt voor uw bestelling. Wij nemen snel contact op.'
+                            : 'Thank you for your order. We will contact you soon.'
+                    );
+                } else {
+                    // Formspree returned an error (e.g. validation / quota)
+                    const data = await response.json().catch(() => ({}));
+                    const errMsg = data.errors
+                        ? data.errors.map(err => err.message).join(', ')
+                        : (currentLang === 'nl' ? 'Er is een fout opgetreden. Probeer het opnieuw.' : 'An error occurred. Please try again.');
+                    statusDiv.textContent = `❌ ${errMsg}`;
+                    statusDiv.style.color = '#CC0000';
+                }
+            } catch (networkErr) {
+                // Network / CORS failure
+                statusDiv.textContent = currentLang === 'nl'
+                    ? '❌ Netwerkfout. Controleer uw verbinding en probeer het opnieuw.'
+                    : '❌ Network error. Please check your connection and try again.';
+                statusDiv.style.color = '#CC0000';
+            } finally {
+                submitBtn.textContent = currentLang === 'nl' ? 'Verstuur Bestelaanvraag' : 'Submit Order Request';
+                submitBtn.disabled = false;
+            }
+        });
+    }
+
     // --- Initial Language & Telemetry Initialization ---
     applyLanguage('nl');
 });
