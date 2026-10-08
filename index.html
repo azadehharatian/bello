@@ -1,88 +1,334 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="nl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bello - The Social Robot for Meaningful Connections</title>
-    <meta name="description" content="Bello is a secure, native-AI social robot designed to support elderly people with dementia through meaningful, personalized interactions.">
+    <title>Bello - Slimme Sociale Robot met Lokale AI, Verkeer & Weer Intelligentie</title>
+    <meta name="description" content="Bello is een lokale AI sociale robot met spraakherkenning, luidspreker, actueel verkeer- en weerbericht via openbare APIs, en 100% AVG/GDPR privacy bewaring.">
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
 </head>
 <body>
+    <!-- Navbar -->
     <header class="navbar">
-        <div class="logo">Bello<span>.</span></div>
+        <div class="logo">
+            Bello<span class="dot">.</span> 
+            <span class="badge-dutch"><span class="flag">🇳🇱</span> Ontworpen in Nederland</span>
+            <span class="badge-gdpr"><span class="pulse-dot"></span> <span data-i18n="badge_gdpr">AVG/GDPR Bewaring Op Apparaat</span></span>
+        </div>
         <nav>
-            <a href="#features">Features</a>
-            <a href="#security">Privacy & Security</a>
-            <a href="#order" class="btn-primary">Order Now</a>
+            <a href="#demo" data-i18n="nav_demo">Demonstratie</a>
+            <a href="#traffic-weather" data-i18n="nav_traffic">Verkeer & Weer</a>
+            <a href="#gdpr-vault" data-i18n="nav_gdpr">AVG Privacy</a>
+            <a href="#order" class="btn-primary" data-i18n="nav_order">Bello Bestellen</a>
+            <button id="langToggleBtn" class="lang-toggle-btn">🇳🇱 NL | 🇬🇧 EN</button>
         </nav>
     </header>
 
+    <!-- Hero Section -->
     <section class="hero">
         <div class="hero-content">
-            <h1>Meet Bello. <br>Your Companion in Memory.</h1>
-            <p>A talkative, fun, and secure social robot designed to bring joy and assistance to elderly individuals with dementia. Bello speaks your language and uses past memories to create meaningful interactions.</p>
-            <a href="#order" class="btn-primary large">Order Bello Today</a>
+            <div class="hero-pill">
+                <span class="pill-icon">🛡️</span> <span data-i18n="hero_pill">Lokale AI • Eigen Spraak & Geheugen • Externe Verkeer/Weer APIs</span>
+            </div>
+            <h1 data-i18n="hero_title">Bello Spreekt, Luistert & Gidst Uw Reistijd.</h1>
+            <p data-i18n="hero_desc">
+                Een interactieve sociale robot met lokale AI-spraakherkenning, ingebouwde luidspreker en demonstratiescherm. Bello haalt actuele verkeersinformatie en weerberichten op via openbare APIs, terwijl <strong>100% van alle spraak- en persoonsgegevens in het apparaat blijven</strong> voor strikte AVG/GDPR bewaring.
+            </p>
+            <div class="hero-actions">
+                <a href="#demo" class="btn-primary large" data-i18n="hero_btn_demo">Probeer Robot Demo Live</a>
+                <a href="#gdpr-vault" class="btn-secondary large" data-i18n="hero_btn_gdpr">Inspecteer AVG Vault</a>
+            </div>
         </div>
-        <div class="hero-image">
-            <div class="blob"></div>
-            <img src="bello-robot.jpg" alt="Bello Social Robot Companion" id="bello-img">
+
+        <!-- Hardware Card with attached photo & real display screen -->
+        <div class="hero-robot-preview">
+            <div class="robot-hardware-card dutch-theme-card">
+                <div class="hardware-header">
+                    <div class="status-indicator online"></div>
+                    <span class="hardware-title">BELLO-v2 // HARDWARE DEMONSTRATIE</span>
+                    <span class="local-ai-tag" data-i18n="tag_local_ai">LOKALE AI ACTIEF</span>
+                </div>
+
+                <!-- Hardware Device Photo Showcase -->
+                <div class="hardware-photo-container">
+                    <img src="bello-bus-device.jpg" alt="Bello Robot Hardware inside Dutch Bus" class="hardware-bus-img" id="hardwareImg">
+                    <div class="photo-overlay-tag">
+                        <span class="bus-icon">🚌</span> <span data-i18n="photo_tag">Bello in actie in het Nederlands Openbaar Vervoer</span>
+                    </div>
+                </div>
+
+                <!-- Interactive Display Screen on Bello -->
+                <div class="bello-small-screen" id="belloScreen">
+                    <div class="screen-top-bar">
+                        <span id="screenTime">12:00</span>
+                        <span class="screen-wifi">API: TRAFFIC/WX 🟢</span>
+                    </div>
+                    <div class="screen-main-content">
+                        <div class="bello-display-brand">bello</div>
+                        <div class="bello-speaks-status" id="belloSpeaksText">bello Spreekt!...</div>
+                        
+                        <!-- Concentric Voice Circle Animation matched to physical hardware -->
+                        <div class="robot-face-expression" id="robotFace">
+                            <div class="concentric-ring outer"></div>
+                            <div class="concentric-ring inner"></div>
+                            <div class="core-dot"></div>
+                        </div>
+
+                        <div class="screen-text-display" id="screenTextDisplay">
+                            "Hallo! Klik op de microfoon of luidspreker om te praten over verkeer en weer!"
+                        </div>
+
+                        <button id="screenStopBtn" class="screen-stop-button">STOP</button>
+                    </div>
+                    <div class="screen-footer-bar">
+                        <span id="screenStatusBadge">STATUS: IDLE</span>
+                        <span id="screenGdprBadge">AVG: LOKAAL ALLEEN</span>
+                    </div>
+                </div>
+
+                <!-- Speaker & Audio Visualizer -->
+                <div class="bello-speaker-system">
+                    <div class="speaker-grille">
+                        <div class="speaker-hole"></div>
+                        <div class="speaker-hole"></div>
+                        <div class="speaker-hole"></div>
+                        <div class="speaker-hole"></div>
+                        <div class="speaker-hole"></div>
+                    </div>
+                    <div class="audio-wave-visualizer" id="audioWaveform">
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                    </div>
+                    <div class="speaker-controls">
+                        <button id="muteSpeakerBtn" class="btn-icon" title="Schakel luidspreker in/uit">🔊 Luidspreker Actief</button>
+                        <span class="speaker-label" data-i18n="speaker_label">HD Spraakuitvoer (Lokale Synthese)</span>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
-    <section id="features" class="features">
-        <h2>More Than Just a Robot</h2>
+    <!-- Public Transit Context Gallery Section -->
+    <section class="transit-gallery-section">
+        <div class="gallery-container">
+            <div class="gallery-info">
+                <span class="section-badge">🚌 MOBILITEIT & OV INTEGRATIE</span>
+                <h2 data-i18n="transit_title">Slimme Assistentie in Bus, Tram & Trein</h2>
+                <p data-i18n="transit_desc">
+                    De Bello hardware is speciaal ontworpen voor gebruik onderweg in het openbaar vervoer en auto's. Reizigers krijgen direct gesproken verkeersupdates, halte-informatie en weerwaarschuwingen zonder dat hun stem of locatie naar externe servers wordt verstuurd.
+                </p>
+                <div class="transit-specs">
+                    <div class="spec-item">
+                        <span class="spec-num">100%</span>
+                        <span class="spec-txt" data-i18n="spec_1">Lokale AVG/GDPR Gegevensbescherming</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-num">&lt; 50ms</span>
+                        <span class="spec-txt" data-i18n="spec_2">Lokale Spraakherkenning Responstijd</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-num">5V USB</span>
+                        <span class="spec-txt" data-i18n="spec_3">Eenvoudige Voeding in Bus of Auto</span>
+                    </div>
+                </div>
+            </div>
+            <div class="gallery-photo-card">
+                <img src="bello-bus-device.jpg" alt="Bello Device on Dutch Bus Window Ledge">
+                <div class="photo-caption" data-i18n="photo_caption">
+                    Foto: Bello prototype getest op de buslijn met live verkeers- & weer-updates.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Demonstration Section -->
+    <section id="demo" class="demo-section">
+        <div class="section-title">
+            <h2 data-i18n="demo_title">Interactieve Spraak & Script Demonstratie</h2>
+            <p data-i18n="demo_desc">Praat met Bello via spraak of voorbeeldscripts. Bello begrijpt vragen lokaal, spreekt via de luidspreker, en haalt live verkeers- en weer-APIs op.</p>
+        </div>
+
+        <div class="demo-grid">
+            <!-- Left Console: Voice Script & Speech Input -->
+            <div class="demo-card console-card">
+                <h3><span class="icon">🎙️</span> <span data-i18n="console_title">Spraak & Script Interface</span></h3>
+                <p class="card-subtitle" data-i18n="console_subtitle">Alle audioverwerking en spraak NLU-modellen draaien strikt op het apparaat in uw browser.</p>
+
+                <div class="voice-controls">
+                    <button id="startRecordBtn" class="btn-record">
+                        <span class="mic-icon">🎤</span> <span id="recordBtnText" data-i18n="btn_record">Spreek met Bello (Microfoon)</span>
+                    </button>
+                    <span class="or-divider" data-i18n="or_divider">of klik op een voorbeeldscript:</span>
+                </div>
+
+                <div class="script-presets" id="scriptPresets">
+                    <button class="preset-btn" data-script-nl="Wat is de verkeerssituatie op dit moment?" data-script-en="What is the traffic condition right now?">
+                        🚗 <span data-i18n="preset_1">"Wat is de verkeerssituatie op dit moment?"</span>
+                    </button>
+                    <button class="preset-btn" data-script-nl="Heeft het weer invloed op mijn reistijd vandaag?" data-script-en="Will weather affect my commute today?">
+                        🌧️ <span data-i18n="preset_2">"Heeft het weer invloed op mijn reistijd vandaag?"</span>
+                    </button>
+                    <button class="preset-btn" data-script-nl="Geef mij het ochtend verkeersnieuws overzicht." data-script-en="Give me the morning traffic news digest.">
+                        📰 <span data-i18n="preset_3">"Geef mij het ochtend verkeersnieuws overzicht."</span>
+                    </button>
+                    <button class="preset-btn" data-script-nl="Bekijk mijn lokale AVG / GDPR privacy status." data-script-en="Read my local GDPR privacy status.">
+                        🔒 <span data-i18n="preset_4">"Bekijk mijn lokale AVG / GDPR privacy status."</span>
+                    </button>
+                </div>
+
+                <div class="custom-input-group">
+                    <input type="text" id="customScriptInput" placeholder="Typ een aangepast spraakscript..." data-i18n-ph="input_placeholder" />
+                    <button id="sendScriptBtn" class="btn-primary" data-i18n="btn_send">Verstuur Script</button>
+                </div>
+
+                <div class="nlu-debugger">
+                    <h4 data-i18n="nlu_title">Lokale NLU Parser Output (Op Apparaat)</h4>
+                    <div class="code-block" id="nluOutput">
+                        // Wachten op spraakcommando of script-trigger...
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Console: Live Traffic & Weather API Feed -->
+            <div class="demo-card api-card">
+                <div class="card-header-flex">
+                    <h3><span class="icon">📡</span> <span data-i18n="api_title">Openbare API Telemetrie</span></h3>
+                    <div class="city-selector">
+                        <label for="citySelect" data-i18n="label_city">Stad:</label>
+                        <select id="citySelect">
+                            <option value="Amsterdam">Amsterdam (NL)</option>
+                            <option value="Rotterdam">Rotterdam (NL)</option>
+                            <option value="Utrecht">Utrecht (NL)</option>
+                            <option value="London">London (UK)</option>
+                            <option value="Berlin">Berlin (DE)</option>
+                            <option value="Paris">Paris (FR)</option>
+                        </select>
+                        <button id="fetchApiBtn" class="btn-small" data-i18n="btn_refresh">Ververs API</button>
+                    </div>
+                </div>
+                <p class="card-subtitle" data-i18n="api_subtitle">Alleen weer- en verkeersgegevens worden opgehaald via openbare APIs. Er wordt 0% identiteit of spraak verzonden.</p>
+
+                <div class="weather-traffic-display">
+                    <div class="api-box weather-box">
+                        <div class="box-title" data-i18n="wx_box_title">🌦️ Live Weer API (Open-Meteo)</div>
+                        <div class="box-content" id="weatherContent">
+                            <div class="loading-spinner">Laden van actueel weerbericht...</div>
+                        </div>
+                    </div>
+
+                    <div class="api-box traffic-box">
+                        <div class="box-title" data-i18n="traffic_box_title">🚦 Live Verkeersnieuws & File Feed</div>
+                        <div class="box-content" id="trafficContent">
+                            <div class="loading-spinner">Laden van verkeersnieuws feed...</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="api-log-container">
+                    <h4 data-i18n="api_log_title">API Request Inspector (Strikt Anonieme Queries)</h4>
+                    <pre class="api-log" id="apiLog">// Uitgaande API-logs verschijnen hier</pre>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Overview -->
+    <section id="traffic-weather" class="features">
+        <h2 data-i18n="features_title">Hybride On-Device Architectuur</h2>
         <div class="feature-grid">
             <div class="feature-card">
                 <div class="icon">🗣️</div>
-                <h3>Meaningful Conversations</h3>
-                <p>Bello uses past memories to engage in personalized, familiar interactions in the user's native language.</p>
+                <h3 data-i18n="feat1_title">Lokale Spraak NLU & Luidspreker</h3>
+                <p data-i18n="feat1_desc">Spraakherkenning en HD text-to-speech voeren volledig uit binnen het lokale systeem zonder externe cloud-servers.</p>
             </div>
             <div class="feature-card">
-                <div class="icon">🧠</div>
-                <h3>Native AI System</h3>
-                <p>Completely self-contained intelligence. Bello doesn't rely on cloud APIs, ensuring lightning-fast responses and unparalleled privacy.</p>
+                <div class="icon">🖥️</div>
+                <h3 data-i18n="feat2_title">Geïntegreerd Compact Scherm</h3>
+                <p data-i18n="feat2_desc">Bello heeft een helder display voor snelle visuele verkeersmeldingen, weersamenvattingen en statusiconen.</p>
             </div>
             <div class="feature-card">
-                <div class="icon">✨</div>
-                <h3>Fun & Helpful</h3>
-                <p>From playing favorite songs and telling stories to helping with basic daily tasks, Bello is a constant source of joy.</p>
+                <div class="icon">📡</div>
+                <h3 data-i18n="feat3_title">Externe Verkeer & Weer APIs</h3>
+                <p data-i18n="feat3_desc">Haalt actuele snelwekinformatie, file-updates en weersverwachtingen op via openbare bronnen.</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon">🔒</div>
+                <h3 data-i18n="feat4_title">AVG / GDPR Data Bewaring</h3>
+                <p data-i18n="feat4_desc">Persoonlijke scripts, audio-opnames en voorkeuren blijven strikt in de lokale kluis. 100% AVG compliant.</p>
             </div>
         </div>
     </section>
 
-    <section id="security" class="security">
+    <!-- GDPR / AVG Vault & Privacy Preservation Section -->
+    <section id="gdpr-vault" class="security">
         <div class="security-content">
-            <h2>Your Privacy is Our Priority.</h2>
-            <p>We believe memory is sacred. That's why Bello is built with a strictly native AI architecture. No continuous internet connection is required for core interactions. Fully GDPR compliant, Bello guarantees that your loved one's data never leaves their side.</p>
+            <div class="gdpr-shield-icon">🛡️</div>
+            <h2 data-i18n="gdpr_title">AVG Bewaring & Lokaal Geheugenbeheer</h2>
+            <p data-i18n="gdpr_desc">
+                In tegenstelling tot traditionele AI-apparaten die uw stem opslaan op cloudservers, verwerkt Bello spraakscripts lokaal. Alle spraak-cache en reisvoorkeuren blijven strikt in het apparaat.
+            </p>
+
+            <div class="gdpr-dashboard">
+                <div class="gdpr-metric">
+                    <span class="metric-value" id="cloudTrafficByteCount">0 Bytes</span>
+                    <span class="metric-label" data-i18n="metric1_label">Cloud Spraakdata Verzonden</span>
+                </div>
+                <div class="gdpr-metric">
+                    <span class="metric-value" id="localMemoryCount">0 KB</span>
+                    <span class="metric-label" data-i18n="metric2_label">Versleuteld Lokaal Geheugen</span>
+                </div>
+                <div class="gdpr-metric">
+                    <span class="metric-value">AVG Art. 17 / 20</span>
+                    <span class="metric-label" data-i18n="metric3_label">Recht op Wissing & Dataportabiliteit</span>
+                </div>
+            </div>
+
+            <div class="gdpr-actions">
+                <button id="inspectMemoryBtn" class="btn-secondary" data-i18n="btn_inspect">Inspecteer Lokale Vault Inhoud</button>
+                <button id="exportGdprBtn" class="btn-secondary" data-i18n="btn_export">Exporteer AVG Gegevens (JSON)</button>
+                <button id="wipeMemoryBtn" class="btn-danger" data-i18n="btn_wipe">Wis Al Het Lokale Geheugen</button>
+            </div>
+
+            <div id="memoryInspectModal" class="inspect-vault-box hidden">
+                <h4 data-i18n="modal_title">Versleutelde Lokale Kluis Inhoud (Alleen Op Apparaat)</h4>
+                <pre id="vaultJsonView">{ "status": "Nog geen lokale gebruikersgegevens opgeslagen" }</pre>
+            </div>
         </div>
     </section>
 
+    <!-- Order Section -->
     <section id="order" class="order-section">
         <div class="order-container">
-            <h2>Bring Bello Home</h2>
-            <p>Leave your details below to place an order or inquire about Bello.</p>
+            <h2 data-i18n="order_title">Bestel Bello Robot</h2>
+            <p data-i18n="order_desc">Uitgerust met lokale AI-spraakengine, demonstratiescherm, ingebouwde luidspreker, verkeer/weer integratie en AVG privacy bewaring.</p>
             <form id="orderForm" action="api/contact.php" method="POST">
                 <div class="input-group">
-                    <label for="name">Full Name</label>
-                    <input type="text" id="name" name="name" required>
+                    <label for="name" data-i18n="label_name">Volledige Naam</label>
+                    <input type="text" id="name" name="name" placeholder="Jan de Vries" required>
                 </div>
                 <div class="input-group">
-                    <label for="email">Email Address</label>
-                    <input type="email" id="email" name="email" required>
+                    <label for="email" data-i18n="label_email">E-mailadres</label>
+                    <input type="email" id="email" name="email" placeholder="jan@voorbeeld.nl" required>
                 </div>
                 <div class="input-group">
-                    <label for="quantity">Number of Units</label>
+                    <label for="quantity" data-i18n="label_quantity">Aantal Stuks</label>
                     <input type="number" id="quantity" name="quantity" min="1" value="1" required>
                 </div>
-                <button type="submit" class="btn-submit">Submit Request</button>
+                <button type="submit" class="btn-submit" data-i18n="btn_submit">Verstuur Bestelaanvraag</button>
                 <div id="formStatus"></div>
             </form>
         </div>
     </section>
 
     <footer>
-        <p>&copy; 2026 Bello Robotics. All rights reserved.</p>
+        <p>&copy; 2026 Bello Robotics Nederland. Lokale AI • AVG / GDPR Compliant • Openbare Verkeer & Weer API Integratie.</p>
     </footer>
 
     <script src="script.js"></script>
